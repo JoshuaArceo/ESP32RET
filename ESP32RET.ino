@@ -103,6 +103,11 @@ void loadSettings() {
 #ifdef CONFIG_IDF_TARGET_ESP32S3
     defaultVal = 3;
 #endif
+#ifdef ESP32_EVB
+    defaultVal = 4;
+#endif
+
+
     settings.systemType = nvPrefs.getUChar("systype", defaultVal);
 
     if (settings.systemType == 0) {
@@ -241,6 +246,29 @@ void loadSettings() {
         strcpy(otaHost, "media3.evtv.me");
         strcpy(otaFilename, "/esp32s3ret.bin");
     }
+    if (settings.systemType == 4) {
+        Logger::console("Running on Olimex ESP32 EVB");
+        canBuses[0] = &CAN0;
+        SysSettings.LED_CANTX = 33;
+        SysSettings.LED_CANRX = 33;
+        SysSettings.LED_LOGGING = 33;
+        SysSettings.LED_CONNECTION_STATUS = 33;
+        SysSettings.fancyLED = false;
+        SysSettings.logToggle = false;
+        SysSettings.txToggle = true;
+        SysSettings.rxToggle = true;
+        SysSettings.lawicelAutoPoll = true;
+        SysSettings.lawicelMode = false;
+        SysSettings.lawicellExtendedMode = false;
+        SysSettings.lawicelTimestamping = true;
+        SysSettings.isWifiActive = true;
+        SysSettings.isWifiConnected = false;
+        SysSettings.numBuses = 1;
+        strcpy(deviceName, "OLIMEX_ESP32-EVB");
+        strcpy(otaHost, "media3.evtv.me");
+        strcpy(otaFilename, "/esp32-evbret.bin");
+        CAN0.setCANPins(GPIO_NUM_35, GPIO_NUM_5);
+    }
 
     if (nvPrefs.getString("SSID", settings.SSID, 32) == 0) {
         strcpy(settings.SSID, deviceName);
@@ -364,6 +392,7 @@ void loop() {
     uint8_t in_byte;
 
     /*if (Serial)*/ isConnected = true;
+
 
     if (SysSettings.lawicelPollCounter > 0)
         SysSettings.lawicelPollCounter--;
