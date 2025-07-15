@@ -309,13 +309,12 @@ void loadSettings() {
 
 void setup() {
 #ifdef CONFIG_IDF_TARGET_ESP32S3
-    // for the ESP32S3 it will block if nothing is connected to USB and that can
-    // slow down the program if nothing is connected. But, you can't set 0 or
-    // writing rapidly to USB will lose data. It needs some sort of timeout but
-    // I'm not sure exactly how much is needed or if there is a better way to
-    // deal with this issue.
-    //  TODO: there is no such method =(
-    //  Serial.setTxTimeoutMs(2);
+    //for the ESP32S3 it will block if nothing is connected to USB and that can slow down the program
+    //if nothing is connected. But, you can't set 0 or writing rapidly to USB will lose data. It needs
+    //some sort of timeout but I'm not sure exactly how much is needed or if there is a better way
+    //to deal with this issue.
+    // TODO: there is no such method =(
+    // Serial.setTxTimeoutMs(2);
 #endif
     Serial.begin(1000000); // for production
     // Serial.begin(115200); //for testing
